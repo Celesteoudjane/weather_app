@@ -54,7 +54,7 @@ def draw_welcome_screen(window, canvas):
 
     canvas.create_text(200, 100, text="texte à afficher", font=..., fill="white", tags="ecran")
 
-    button = tk.Button(window, text="...", command=lambda: """à compléter ...""")
+    button = tk.Button(window, text="holaaaaaaaaaaa", command=lambda: """à compléter ...""")
 
     canvas.create_window(200, 400, window=button, tags="ecran")
 
