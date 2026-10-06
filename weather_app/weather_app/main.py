@@ -16,11 +16,15 @@ canvas = None
 
 def main():
     global window, canvas
+    global image_background
+    window = tk.Tk()
 
-    # TODO
+    canvas = tk.Canvas(window, width=400, height= 500)
+    canvas.pack()
 
-    # ...
-
+    load_background(canvas)
+    draw_welcome_screen(window, canvas)
+    window.mainloop()
 
 if __name__ == "__main__":
     main()

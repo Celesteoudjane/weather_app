@@ -27,9 +27,10 @@ def load_background(canvas):
     """Charge "assets/blue_sky.jpg", la redimensionne et la place sur le canvas."""
     global image_background
 
-    # image = ...
-    # ...
-    # canvas.create_image(...)
+    image = Image.open("assets/blue_sky.jpg").convert("RGBA")
+    image = image.resize((WIDTH, HEIGHT))
+    image_background = ImageTk.PhotoImage(image)
+    canvas.create_image(0, 0, image=image_background, anchor="nw")
 
 
 def erase_screen(canvas):
@@ -46,12 +47,17 @@ def draw_welcome_screen(window, canvas):
     global weather_icon
 
     erase_screen(canvas)
-    temperature, code, t_min, t_max = 0, 0, 0, 0 # TODO
+    # temperature, code, t_min, t_max = 0, 0, 0, 0
+    temperature = 19.7
+    code = 0
+    t_min, t_max = 18.0, 27.4
 
-    # TODO
-    # canvas.create_text(...)
+    canvas.create_text(200, 100, text="texte à afficher", font=..., fill="white", tags="ecran")
 
-    # ...
+    button = tk.Button(window, text="...", command=lambda: """à compléter ...""")
+
+    canvas.create_window(200, 400, window=button, tags="ecran")
+
 
 def draw_forecast(window, canvas):
     """Écran 2 : graphique des températures sur 7 jours"""
