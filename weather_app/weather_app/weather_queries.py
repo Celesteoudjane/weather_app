@@ -52,3 +52,4 @@ def get_forecast(city, start_day):
     temperatures_min = data["daily"]["temperature_2m_min"]
     temperatures_max = data["daily"]["temperature_2m_max"]
     return dates, temperatures_min, temperatures_max
+# blob
