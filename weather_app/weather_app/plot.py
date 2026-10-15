@@ -26,4 +26,11 @@ def create_plot(dates, temperatures_min, temperatures_max):
 
 
 def draw_forecast(window, canvas):
-    pass
+    if canvas is not None:
+        canvas.get_tk_widget().destroy()
+    dates, t_min, t_max = get_forecast()
+    figure = create_plot(dates, t_min, t_max)
+    canvas = FigureCanvasTkAgg(figure, master=window)
+    canvas.draw()
+    canvas.get_tk_widget().pack()
+    return canvas
