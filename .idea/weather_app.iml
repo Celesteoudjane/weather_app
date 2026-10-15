@@ -5,7 +5,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/weather_app/.venv" />
     </content>
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="uv (weather_app) (3)" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="~\PycharmProjects\weather_app\.venv" jdkType="Python SDK" />
+>>>>>>> 32b1e6a4c1aab5f8a6a3b9d72090cd4f7c990a2f
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
