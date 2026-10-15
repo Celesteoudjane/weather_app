@@ -52,20 +52,72 @@ def draw_welcome_screen(window, canvas):
     code = 0
     t_min, t_max = 18.0, 27.4
 
-    canvas.create_text(200, 100, text="texte à afficher", font=..., fill="white", tags="ecran")
-    canvas.create_text(200, 100, text="texte à afficher2", font=..., fill="white", tags="ecran")
+    canvas.create_text(200, 50, text=f"{city}", font=("Arial", 24, "bold"), fill="white", tags="ecran")
 
-    button = tk.Button(window, text="holaaaaaaaaaaa", command=lambda: """à compléter ...""")
+    global weather_icon
+    img = Image.open("assets/icons/sunny.png")
+    img = img.resize((80, 80))
+    weather_icon = ImageTk.PhotoImage(img)
+    canvas.create_image(200, 160, image=weather_icon, tags="ecran")
 
+    canvas.create_text(200, 280, text=f" {temperature}°C", fill="white", font=("Arial", 24, "bold"), tags="ecran")
+    canvas.create_text(200, 350, text=f"Min : {t_min}°C                Max : {t_max}°C", fill="white", tags="ecran")
+
+    button = tk.Button(window, text="Prévisions 7 jours", command=lambda:draw_forecast(window, canvas))
     canvas.create_window(200, 400, window=button, tags="ecran")
 
 
 def draw_forecast(window, canvas):
-    """Écran 2 : graphique des températures sur 7 jours"""
-
     erase_screen(canvas)
-    # start_day = ...
-    dates, t_mins, t_maxs = [], [], [] # TODO
 
-    # ...
+    canvas.create_text(
+        200,
+        40,
+        text=f"Prévisions sur 7 jours - {city}",
+        font=("Arial", 18, "bold"),
+        fill="white",
+        tags="ecran"
+    )
 
+    canvas.create_text(
+        200,
+        70,
+        text="Du 2026-10-05 au 2026-10-11",
+        font=("Arial", 14),
+        fill="white",
+        tags="ecran"
+    )
+
+    dates = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+
+    t_mins = [18, 17, 16, 15, 17, 18, 19]
+    t_maxs = [27, 26, 25, 24, 26, 28, 29]
+
+    figure = create_plot(dates, t_mins, t_maxs)
+
+    graph = FigureCanvasTkAgg(
+        figure,
+        master=window
+    )
+
+    graph.draw()
+
+    canvas.create_window(
+        200,      # center of 400 px canvas
+        260,
+        window=graph.get_tk_widget(),
+        tags="ecran"
+    )
+
+    button = tk.Button(
+        window,
+        text="Accueil",
+        command=lambda: draw_welcome_screen(window, canvas)
+    )
+
+    canvas.create_window(
+        200,
+        460,
+        window=button,
+        tags="ecran"
+    )
