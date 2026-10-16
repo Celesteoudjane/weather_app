@@ -23,7 +23,6 @@ def get_current_weather(city):
     response = requests.get(URL_API, params = parameters, timeout = 10)
     data = response.json()
 
-    # temperature_now, code, t_min_today, t_max_today = 0, 0, 0, 0 # TODO
     temperature_now = data["current"]["temperature_2m"]
     code = data["current"]["weather_code"]
     t_min_today = data["daily"]["temperature_2m_min"][0]
