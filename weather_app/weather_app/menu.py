@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from PIL.ImageChops import offset
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import date
 
@@ -7,6 +8,7 @@ from constants import *
 from weather import *
 from weather_queries import *
 from plot import *
+
 
 # ----------------------------------------------------------------------
 # Variables globales
@@ -42,19 +44,35 @@ def erase_screen(canvas):
 # Ecrans
 # ----------------------------------------------------------------------
 
+def change_city(new_city, window, canvas):
+    """Appelée quand l'utilisateur choisit une ville dans le menu déroulant."""
+    global city
+    city = new_city
+    draw_welcome_screen(window, canvas)
+
+
 def draw_welcome_screen(window, canvas):
     """Écran 1 : Icône de la météo, température actuelle, températures min et max du jour."""
     global weather_icon
 
     erase_screen(canvas)
-    # temperature, code, t_min, t_max = 0, 0, 0, 0
-    temperature = 19.7
-    code = 0
-    t_min, t_max = 18.0, 27.4
+    temperature, code, t_min, t_max = get_current_weather(city)
 
     canvas.create_text(200, 50, text=f"{city}", font=("Arial", 24, "bold"), fill="white", tags="ecran")
 
-    global weather_icon
+    # Menu déroulant pour choisir la ville
+    city_var = tk.StringVar(value=city)
+    city_menu = tk.OptionMenu(
+        window,
+        city_var,
+        *CITIES.keys(),
+        command=lambda choice: change_city(choice, window, canvas)
+    )
+    city_menu.config(font=("Arial", 18, "bold"))
+    canvas.create_window(200, 50, window=city_menu, tags="ecran")
+
+
+    # global weather_icon
     img = Image.open("assets/icons/sunny.png")
     img = img.resize((80, 80))
     weather_icon = ImageTk.PhotoImage(img)
@@ -67,8 +85,10 @@ def draw_welcome_screen(window, canvas):
     canvas.create_window(200, 400, window=button, tags="ecran")
 
 
-def draw_forecast(window, canvas):
+def draw_forecast(window, canvas,offset=0):
     erase_screen(canvas)
+    MIN_OFFSET = -84
+    MAX_OFFSET = 9
 
     canvas.create_text(
         200,
@@ -79,19 +99,21 @@ def draw_forecast(window, canvas):
         tags="ecran"
     )
 
+    start_day = date.today() + timedelta(days=offset)
+
+    dates, t_mins, t_maxs = get_forecast(
+        city,
+        start_day
+    )
+
     canvas.create_text(
         200,
-        70,
-        text="Du 2026-10-05 au 2026-10-11",
-        font=("Arial", 14),
+        75,
+        text=f"Du {dates[0]} au {dates[-1]}",
+        font=("Arial", 10, "bold"),
         fill="white",
         tags="ecran"
     )
-
-    dates = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
-
-    t_mins = [18, 17, 16, 15, 17, 18, 19]
-    t_maxs = [27, 26, 25, 24, 26, 28, 29]
 
     figure = create_plot(dates, t_mins, t_maxs)
 
@@ -109,15 +131,45 @@ def draw_forecast(window, canvas):
         tags="ecran"
     )
 
-    button = tk.Button(
+    button_left = tk.Button(
+        window,
+        text="◀",
+        width=3,
+        state=tk.NORMAL if offset > 0 else tk.DISABLED,
+        command=lambda: draw_forecast(window, canvas, offset - 7)
+    )
+
+    button_accueil = tk.Button(
         window,
         text="Accueil",
         command=lambda: draw_welcome_screen(window, canvas)
     )
 
+    button_right = tk.Button(
+        window,
+        text="▶",
+        width=3,
+        state=tk.NORMAL if offset + 7 <= 9 else tk.DISABLED,
+        command=lambda: draw_forecast(window, canvas, offset + 7)
+    )
+
+    canvas.create_window(
+        120,
+        460,
+        window=button_left,
+        tags="ecran"
+    )
+
     canvas.create_window(
         200,
         460,
-        window=button,
+        window=button_accueil,
+        tags="ecran"
+    )
+
+    canvas.create_window(
+        280,
+        460,
+        window=button_right,
         tags="ecran"
     )

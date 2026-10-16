@@ -15,16 +15,16 @@ def get_current_weather(city):
     parameters = {
         "latitude": latitude,
         "longitude": longitude,
-        "currant": "temperature_2m, weather_code",
-        "daily": "temperature_2m_max, temperature_2m_min",
+        "current": "temperature_2m,weather_code",
+        "daily": "temperature_2m_max,temperature_2m_min",
         "timezone": "auto",
         "forecast_days": 1,
     }
     response = requests.get(URL_API, params = parameters, timeout = 10)
     data = response.json()
 
-    temperature_now, code, t_min_today, t_max_today = 0, 0, 0, 0 # TODO
-    temperature_now = data["current"]["weather_code"]
+    # temperature_now, code, t_min_today, t_max_today = 0, 0, 0, 0 # TODO
+    temperature_now = data["current"]["temperature_2m"]
     code = data["current"]["weather_code"]
     t_min_today = data["daily"]["temperature_2m_min"][0]
     t_max_today = data["daily"]["temperature_2m_max"][0]
